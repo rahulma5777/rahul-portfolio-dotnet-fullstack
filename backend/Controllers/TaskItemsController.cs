@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetFullStack.API.Data;
 using NetFullStack.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NetFullStack.API.Controllers
 {
@@ -11,6 +12,7 @@ namespace NetFullStack.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TaskItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

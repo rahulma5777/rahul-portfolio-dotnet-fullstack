@@ -20,11 +20,13 @@ relationships, RESTful endpoints and a clear separation of concerns.
 
 ## ✨ Project Features
 
-* **Back‑end API:** A RESTful API built with ASP.NET Core 8.0.  It
-  exposes CRUD endpoints for managing users and their tasks.  The API
-  uses Entity Framework Core to model a one‑to‑many relationship (a
-  user can have multiple task items) and includes seed data loaded at
-  runtime.  Swagger UI is enabled to explore the endpoints.
+* **Back‑end API:** A RESTful API built with ASP.NET Core 8.0.  It
+  exposes CRUD endpoints for managing users and their tasks and now
+  supports **JWT Bearer authentication**.  The API uses
+  Entity Framework Core to model a one‑to‑many relationship (a user
+  can have multiple task items) and includes seed data loaded at
+  runtime.  Swagger UI is enabled to explore the endpoints and an
+  `/api/auth/login` endpoint issues tokens for authenticated calls.
 * **Database Layer:** SQL scripts define the schema, relationships and
   stored procedures for a SQL Server database.  An initial data seed
   script creates sample users and tasks.  Stored procedures show how
@@ -35,6 +37,13 @@ relationships, RESTful endpoints and a clear separation of concerns.
   simple CSS.  You can fetch users, view their tasks and add new
   users from the browser.
 * **CI/CD Notes:** The `/docs` folder includes a high‑level description
+* **Tests:** The solution now includes an `backend.Tests` project with
+  integration tests written using xUnit and
+  `Microsoft.AspNetCore.Mvc.Testing`.  These tests spin up the API in
+  memory and verify that key endpoints return the expected status and
+  data structures.  While optional, they illustrate best practices
+  around automated testing and give recruiters confidence in the code
+  quality.
   of how an Azure DevOps or Jenkins pipeline could build, test and
   deploy the back‑end and front‑end components.  Screenshots and
   YAML snippets can be added if actual pipelines are configured.
@@ -44,9 +53,11 @@ relationships, RESTful endpoints and a clear separation of concerns.
 | Layer      | Tech                           | Notes                                        |
 |------------|--------------------------------|-----------------------------------------------|
 | Back‑end   | ASP.NET Core Web API           | .NET 8.0, minimal hosting model, dependency injection |
+| Security   | JWT Bearer Authentication      | Protects API endpoints and issues JSON Web Tokens |
 | Data       | Entity Framework Core + SQL Server | Code‑first models backed by SQL scripts and stored procedures |
 | Front‑end  | React 18 (JSX)                 | Functional components, hooks, fetch API       |
 | Tooling    | Swagger / OpenAPI             | Automatic API documentation                   |
+| Testing    | xUnit, WebApplicationFactory  | Integration tests validate API endpoints      |
 | CI/CD      | Azure DevOps or Jenkins (docs only) | Pipelines described in `/docs/CI‑CD.md`      |
 
 ## 📂 Repository Structure
@@ -114,6 +125,13 @@ The API will automatically create the database (if using code‑first)
 and seed sample data.  Swagger UI will be available at
 `/swagger`.
 
+To obtain a **JWT token** for calling protected endpoints, send a
+`POST` request to `/api/auth/login` with a JSON body containing a
+`username` (matching one of the seeded users) and an optional
+`email`.  The response will include a `token` property that you
+should include in the `Authorization` header of subsequent requests
+as `Bearer &lt;token&gt;`.
+
 ### 4. Run the front‑end UI
 
 ```bash
@@ -123,8 +141,13 @@ npm run dev           # runs the development server on http://localhost:3000
 ```
 Open your browser to `http://localhost:3000` to view the UI.  The
 application will fetch data from the API at `http://localhost:5000` by
-default.  You can configure the API base URL in
-`frontend/src/services/api.js`.
+ default.  You can configure the API base URL in
+ `frontend/src/services/api.js`.
+
+> **Note:** The current front‑end does not implement authentication.  
+> Protected API endpoints (those requiring a token) are intended for
+> demonstration purposes only.  You can extend the UI to support
+> logging in and storing the JWT token for authenticated calls.
 
 ### 5. Explore stored procedures (optional)
 
@@ -136,31 +159,85 @@ EXEC usp_GetTasksByUser @UserId = 1;
 EXEC usp_GetUserCount;
 ```
 
+### 6. Run the tests (optional)
+
+If you wish to execute the automated tests, restore the test project and run the
+test suite using the .NET CLI:
+
+    cd backend.Tests
+    dotnet restore
+    dotnet test
+
+The tests spin up the API in memory and verify that the `/api/users` endpoint
+returns a successful response.  You can add more tests to cover additional
+endpoints and scenarios.
+
+### 7. Running with Docker (optional)
+
+If you'd like to run the API and SQL Server without installing any
+development tools, you can leverage Docker Compose.  A `Dockerfile`
+and `docker-compose.yml` are included at the root of the repository.
+
+```bash
+# build and start the API and database
+docker-compose up --build
+
+# query the running API
+curl http://localhost:5000/api/users
+
+# when finished, stop and remove containers
+docker-compose down
+```
+
+This will start a SQL Server container with a default SA password and
+an API container bound to port 5000.  Data is persisted in a
+named volume (`sql-data`) between runs.  See
+`docs/DEPLOYMENT.md` for further details.
+
 ## 🎓 Resume Alignment
 
-This project is intentionally designed to align with the skills and
-experience described in my resume:
+The design of this project intentionally mirrors the real‑world
+experience described in my professional resume.  Over the past
+**three years** I have worked as a .NET developer for major
+organisations such as **Johnson & Johnson** and **TATA Capital**.  In
+these roles I built and maintained web applications using
+ASP.NET Core, C#, VB.NET and MVC, implemented RESTful services and
+optimised SQL Server queries and stored procedures.  I also
+contributed to migrating legacy systems to .NET Core, resulting in
+performance improvements and reduced technical debt.  This sample
+project reflects those same competencies:
 
-* **.NET & C#:** The back‑end uses ASP.NET Core with minimal hosting,
-  dependency injection, controllers, EF Core and LINQ queries.
-* **SQL Server:** Tables, relationships, seed data and stored
-  procedures demonstrate familiarity with relational modelling and
-  T‑SQL.  Scripts are separated into schema, seed and procedures for
-  clarity.
-* **Front‑end Development:** A React front‑end consumes the API
-  asynchronously and updates the UI in real time.  Component
-  composition and hooks illustrate modern front‑end patterns.
-* **RESTful Design:** Endpoints follow REST conventions (GET, POST,
-  PUT, DELETE) and return appropriate HTTP status codes.  Swagger
-  documents the API.
-* **CI/CD:** Although no live pipelines are included here, the
-  `/docs/CI‑CD.md` file outlines how to build, test and deploy the
-  solution with Azure DevOps or Jenkins.  This demonstrates an
-  understanding of continuous integration and delivery practices.
+* **.NET & C#:** The back‑end API is built with ASP.NET Core 8 using a
+  minimal hosting model, dependency injection and EF Core.  This
+  demonstrates my day‑to‑day work designing RESTful services and
+  reusable components in C#.
+* **SQL Server Expertise:** Tables, foreign key relationships, seed
+  data and stored procedures mirror the data‑layer tasks I have
+  performed professionally.  In past roles I created indexes and
+  optimised queries, which is reflected here through structured
+  scripts and sample stored procedures.
+* **Full‑Stack Development:** On the front‑end I have worked with
+  Angular 8+ and React JS to build responsive user interfaces.  This
+  project uses a React client to fetch and display data from the
+  API, showcasing my ability to integrate the front‑end with the
+  back‑end and provide a cohesive user experience.
+* **Performance & Migration:** At Johnson & Johnson I improved web
+  service performance by 35 percent and migrated legacy VB.NET
+  applications to .NET Core.  Here I demonstrate similar
+  architecture patterns that enable scalability and maintainability.
+* **CI/CD & Cloud:**  In my previous roles I automated builds and
+  deployments using Azure DevOps and Jenkins, reducing deployment
+  times significantly.  While this repository does not include live
+  pipelines, the `/docs/CI‑CD.md` file outlines how to build and
+  deploy using those tools, reflecting my experience with CI/CD
+  practices and cloud platforms.
 
 ## 🧭 Future Enhancements
 
-* Implement authentication & authorisation (e.g. JWT Bearer tokens).
+* **Authentication implemented:** This project now includes a basic JWT
+  Bearer implementation.  Future work could expand this to a full
+  identity system with user registration, password hashing and role‑based
+  authorisation policies.
 * Add validation and error handling to the API controllers.
 * Replace the in‑memory seed with migrations and real data stores.
 * Improve the front‑end with routing, state management (e.g. Redux)

@@ -15,6 +15,10 @@
 
     <!-- Swagger / OpenAPI -->
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+    <!-- Authentication packages for JWT support -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.37.0" />
   </ItemGroup>
 
 </Project>

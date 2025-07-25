@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  # SQL Server container for development and testing.  The SA_PASSWORD
+  # must meet SQL Server's complexity requirements.  In production you
+  # would use secret management or environment variables outside of
+  # source control.
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: netfullstack-sql
+    environment:
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+
+  # API service built from the Dockerfile in this repository.  It depends
+  # on the sqlserver service.  The connection string points to the
+  # sqlserver container by name.  The JWT key can be overridden via
+  # environment variables.
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: netfullstack-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NetFullStackDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
+      - Jwt__Key=SuperSecretKey@345
+    ports:
+      - "5000:8080"
+    depends_on:
+      - sqlserver
+
+volumes:
+  sql-data:
+    driver: local

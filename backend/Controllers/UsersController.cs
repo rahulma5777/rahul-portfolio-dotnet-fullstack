@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using NetFullStack.API.Data;
 using NetFullStack.API.Models;
 
@@ -11,6 +12,7 @@ namespace NetFullStack.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
