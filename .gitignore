@@ -1,0 +1,44 @@
+# .NET build artifacts
+bin/
+obj/
+*.user
+*.dbmdl
+*.suo
+*.cache
+*.log
+*.vscode/
+
+# Visual Studio Code settings
+.vs/
+
+# Node and JavaScript dependencies
+node_modules/
+.npm/
+yarn.lock
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Environment files
+.env
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs and other artifacts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Angular specific
+angular.json
+/.angular/cache/
+
+# React specific
+/.cache/
+cypress/
+/.parcel-cache/
