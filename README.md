@@ -87,6 +87,15 @@ relationships, RESTful endpoints and a clear separation of concerns.
 └── README.md        # You are here!
 ```
 
+## ✅ Latest Improvements (August 2025)
+
+The project has been updated to include modern DevOps and deployment tooling:
+
+* **Frontend containerization:** A multi‑stage Dockerfile has been added to `/frontend` to build and serve the React UI with Nginx.
+* **GitHub Actions CI workflow:** See `.github/workflows/ci.yml` for a pipeline that restores, builds and tests both the back‑end and front‑end on every commit.
+* **Kubernetes manifests:** Deployment and Service manifests for the back‑end and front‑end are included in the `/k8s` directory for easy deployment to any K8s cluster.
+* **Improved documentation:** Additional docs describe how to run the application locally with Docker Compose and deploy it to the cloud.
+
 ## 🚀 Getting Started
 
 These instructions assume you have **.NET 8 SDK**, **SQL Server** and
@@ -198,7 +207,7 @@ named volume (`sql-data`) between runs.  See
 
 The design of this project intentionally mirrors the real‑world
 experience described in my professional resume.  Over the past
-**three years** I have worked as a .NET developer for major
+**4+ years** I have worked as a .NET developer for major
 organisations such as **Johnson & Johnson** and **TATA Capital**.  In
 these roles I built and maintained web applications using
 ASP.NET Core, C#, VB.NET and MVC, implemented RESTful services and
@@ -225,11 +234,13 @@ project reflects those same competencies:
   service performance by 35 percent and migrated legacy VB.NET
   applications to .NET Core.  Here I demonstrate similar
   architecture patterns that enable scalability and maintainability.
-* **CI/CD & Cloud:**  In my previous roles I automated builds and
+* **CI/CD & Cloud:** In my previous roles I automated builds and
   deployments using Azure DevOps and Jenkins, reducing deployment
-  times significantly.  While this repository does not include live
-  pipelines, the `/docs/CI‑CD.md` file outlines how to build and
-  deploy using those tools, reflecting my experience with CI/CD
+  times significantly.  This repository now includes a GitHub Actions
+  workflow that restores, builds and tests both the back‑end and front‑end
+  on every push or pull request.  See `.github/workflows/ci.yml` for the
+  pipeline.  The `/docs/CI‑CD.md` file still outlines how to build and
+  deploy using other tools, reflecting my experience with CI/CD
   practices and cloud platforms.
 
 ## 🧭 Future Enhancements
@@ -242,8 +253,12 @@ project reflects those same competencies:
 * Replace the in‑memory seed with migrations and real data stores.
 * Improve the front‑end with routing, state management (e.g. Redux)
   and styling frameworks (e.g. Tailwind CSS or Material UI).
-* Configure actual CI/CD pipelines and include status badges in this
-  README.
+* Enhance the existing GitHub Actions pipeline to include automated
+  deployment to a cloud platform (Azure App Service, AWS or Kubernetes)
+  and add build/test status badges to this README.
+* Package the back‑end and front‑end into Docker images and publish them
+  to a container registry (Docker Hub or GitHub Container Registry).  Kubernetes
+  deployment manifests are provided in `/k8s` to run the services in a cluster.
 * Deploy the back‑end to Azure App Service and the front‑end to
   GitHub Pages, Netlify or Vercel.
 
