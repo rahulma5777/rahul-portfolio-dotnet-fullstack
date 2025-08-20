@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: ghcr.io/rahulma5777/rahul-portfolio-backend:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=db;Database=TodoDb;User=sa;Password=Your_password123;"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
